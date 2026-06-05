@@ -1,37 +1,34 @@
+'use strict';
+
 /**
- * app.js — Point d'entrée Passenger pour hébergement mutualisé
- *
- * Passenger (cPanel / Phusion) démarre ce fichier avec Node.js.
- * Il doit écouter sur process.env.PORT (assigné par Passenger).
- *
- * Déploiement :
- *   1. npm install --production
- *   2. npm run build:prod   (build + copie des assets standalone)
- *   3. Passenger redémarre automatiquement
+ * app.js — Point d'entrée Passenger (Phusion)
+ * Charge le .env manuellement puis démarre le serveur Next.js standalone
  */
 
-'use strict';
+const path = require('path');
+const fs   = require('fs');
+
+// Charger .env manuellement (sans dépendance dotenv)
+const envFile = path.join(__dirname, '.env');
+if (fs.existsSync(envFile)) {
+  const lines = fs.readFileSync(envFile, 'utf8').split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const idx = trimmed.indexOf('=');
+    if (idx === -1) continue;
+    const key = trimmed.slice(0, idx).trim();
+    const val = trimmed.slice(idx + 1).trim().replace(/^["']|["']$/g, '');
+    if (!process.env[key]) process.env[key] = val;
+  }
+}
 
 process.env.NODE_ENV = 'production';
 
-const path   = require('path');
-const http   = require('http');
-const { parse } = require('url');
+// Passenger fournit PORT — le standalone Next.js l'utilise directement
+const port = process.env.PORT || '3000';
+process.env.PORT = port;
+process.env.HOSTNAME = process.env.HOSTNAME || '0.0.0.0';
 
-// Charger les variables d'environnement depuis .env.production
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
-const port     = parseInt(process.env.PORT || '3000', 10);
-const hostname = process.env.HOSTNAME || '0.0.0.0';
-
-// Next.js standalone — le serveur généré par `next build` avec output: 'standalone'
-// Le fichier server.js est dans .next/standalone/
-const standaloneServer = path.join(__dirname, '.next', 'standalone', 'server.js');
-
-// On surcharge le port et hostname avant le require
-process.env.PORT     = String(port);
-process.env.HOSTNAME = hostname;
-
-require(standaloneServer);
-
-console.log(`[CESEPEF] Serveur démarré sur le port ${port}`);
+// Démarrer le serveur Next.js standalone
+require(path.join(__dirname, '.next', 'standalone', 'server.js'));
