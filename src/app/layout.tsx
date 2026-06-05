@@ -1,42 +1,25 @@
-"use client";
-
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import ScrollToTop from "@/components/ScrollToTop";
 import { Inter } from "next/font/google";
-import { usePathname } from "next/navigation";
+import { Providers } from "./providers";
+import LayoutContent from "./layout-content";
 import "../styles/index.css";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname();
-  const isAdmin = pathname?.startsWith("/admin");
+export const metadata: Metadata = {
+  title: "CESEPEF — Cabinet d'Expertise Tchad",
+  description: "Cabinet d'Expertise de Suivi & Évaluation de Projets, d'Études et de Formations. N'Djamena, Tchad.",
+};
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang="fr">
       <head />
       <body className={`bg-[#FCFCFC] dark:bg-black ${inter.className}`}>
         <Providers>
-          {isAdmin ? (
-            <>{children}</>
-          ) : (
-            <div className="isolate">
-              <Header />
-              {children}
-              <Footer />
-            </div>
-          )}
-          {!isAdmin && <ScrollToTop />}
+          <LayoutContent>{children}</LayoutContent>
         </Providers>
       </body>
     </html>
   );
 }
-
-import { Providers } from "./providers";
-
