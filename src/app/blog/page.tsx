@@ -1,99 +1,78 @@
-import SingleBlog from "@/components/Blog/SingleBlog";
-import blogData from "@/components/Blog/blogData";
+import Image from "next/image";
+import Link from "next/link";
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
+import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Blog Page for Startup Nextjs Template",
-  // other metadata
+  title: "Blog | CESEPEF",
+  description: "Notes méthodologiques, analyses sectorielles et ressources pratiques de CESEPEF.",
 };
 
-const Blog = () => {
+export default async function BlogPage() {
+  const articles = await prisma.publication.findMany({
+    where: { published: true },
+    orderBy: { publishedAt: "desc" },
+  });
+
   return (
     <>
       <Breadcrumb
-        pageName="Blog Grid"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
+        pageName="Blog"
+        description="Notes méthodologiques, analyses sectorielles et ressources pratiques pour les professionnels du suivi-évaluation et du développement en Afrique centrale et au Sahel."
       />
-
-      <section className="pt-[120px] pb-[120px]">
+      <section className="py-16 md:py-20 lg:py-28">
         <div className="container">
-          <div className="-mx-4 flex flex-wrap justify-center">
-            {blogData.map((blog) => (
-              <div
-                key={blog.id}
-                className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3"
-              >
-                <SingleBlog blog={blog} />
-              </div>
-            ))}
-          </div>
-
-          <div className="-mx-4 flex flex-wrap" data-wow-delay=".15s">
-            <div className="w-full px-4">
-              <ul className="flex items-center justify-center pt-8">
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    Prev
-                  </a>
-                </li>
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    1
-                  </a>
-                </li>
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    2
-                  </a>
-                </li>
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    3
-                  </a>
-                </li>
-                <li className="mx-1">
-                  <span className="bg-body-color/15 text-body-color flex h-9 min-w-[36px] cursor-not-allowed items-center justify-center rounded-md px-4 text-sm">
-                    ...
-                  </span>
-                </li>
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    12
-                  </a>
-                </li>
-                <li className="mx-1">
-                  <a
-                    href="#0"
-                    className="bg-body-color/15 text-body-color hover:bg-primary flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition hover:text-white"
-                  >
-                    Next
-                  </a>
-                </li>
-              </ul>
+          {articles.length === 0 ? (
+            <p className="text-center text-body-color">Aucune publication pour le moment.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
+              {articles.map((article) => {
+                const tag = article.tags
+                  ? (() => { try { return JSON.parse(article.tags!)[0]; } catch { return article.tags!.split(",")[0].trim(); } })()
+                  : article.category;
+                return (
+                  <div key={article.id} className="group relative overflow-hidden rounded-xs bg-white shadow-one duration-300 hover:shadow-two dark:bg-dark">
+                    <Link href={`/blog/${article.slug}`} className="relative block aspect-[37/22] w-full overflow-hidden">
+                      {tag && (
+                        <span className="absolute right-6 top-6 z-20 inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold capitalize text-white">
+                          {tag}
+                        </span>
+                      )}
+                      {article.coverImage ? (
+                        <Image src={article.coverImage} alt={article.title} fill className="object-cover transition duration-300 group-hover:scale-105" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-primary/10">
+                          <span className="text-5xl font-bold text-primary/20">{article.title.charAt(0)}</span>
+                        </div>
+                      )}
+                    </Link>
+                    <div className="p-6 sm:p-8">
+                      <h3>
+                        <Link href={`/blog/${article.slug}`}
+                          className="mb-4 block text-xl font-bold text-black hover:text-primary dark:text-white sm:text-2xl">
+                          {article.title}
+                        </Link>
+                      </h3>
+                      <p className="mb-6 border-b border-body-color/10 pb-6 text-base text-body-color dark:border-white/10">
+                        {article.excerpt ?? article.content.slice(0, 120) + "…"}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-body-color">{article.author}</span>
+                        <span className="text-xs text-body-color">
+                          {article.publishedAt
+                            ? new Date(article.publishedAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+                            : ""}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          )}
         </div>
       </section>
     </>
   );
-};
-
-export default Blog;
+}

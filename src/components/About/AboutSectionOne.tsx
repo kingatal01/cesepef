@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SectionTitle from "../Common/SectionTitle";
 
 const checkIcon = (
@@ -8,7 +7,7 @@ const checkIcon = (
 );
 
 const AboutSectionOne = () => {
-  const List = ({ text }) => (
+  const List = ({ text }: { text: string }) => (
     <p className="text-body-color mb-5 flex items-center text-lg font-medium">
       <span className="bg-primary/10 text-primary mr-4 flex h-[30px] w-[30px] items-center justify-center rounded-md">
         {checkIcon}
@@ -24,45 +23,62 @@ const AboutSectionOne = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <SectionTitle
-                title="Crafted for Startup, SaaS and Business Sites."
-                paragraph="The main ‘thrust’ is to focus on educating attendees on how to best protect highly vulnerable business applications with interactive panel discussions and roundtables."
+                title="Cabinet d'expertise indépendant basé à N'Djamena"
+                paragraph="CESEPEF — Cabinet d'Expertise de Suivi & Évaluation de Projets, d'Études et de Formations — est un bureau d'études et de conseil de droit tchadien, fondé en octobre 2021. Notre raison d'être : combler le déficit d'expertise indépendante, rigoureuse et contextualisée en matière de suivi-évaluation, d'études et de renforcement des capacités."
                 mb="44px"
               />
 
-              <div
-                className="mb-12 max-w-[570px] lg:mb-0"
-                data-wow-delay=".15s"
-              >
+              <div className="mb-12 max-w-[570px] lg:mb-0" data-wow-delay=".15s">
                 <div className="mx-[-12px] flex flex-wrap">
                   <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Premium quality" />
-                    <List text="Tailwind CSS" />
-                    <List text="Use for lifetime" />
+                    <List text="Expertise nationale reconnue" />
+                    <List text="Standards OCDE-CAD & GAR" />
+                    <List text="Indépendance d'analyse" />
                   </div>
-
                   <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Next.js" />
-                    <List text="Rich documentation" />
-                    <List text="Developer friendly" />
+                    <List text="8+ pays d'intervention" />
+                    <List text="Approche numérique & data" />
+                    <List text="Livrables actionnables" />
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="w-full px-4 lg:w-1/2">
-              <div className="relative mx-auto aspect-25/24 max-w-[500px] lg:mr-0">
-                <Image
-                  src="/images/about/about-image.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto max-w-full drop-shadow-three dark:hidden dark:drop-shadow-none lg:mr-0"
-                />
-                <Image
-                  src="/images/about/about-image-dark.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto hidden max-w-full drop-shadow-three dark:block dark:drop-shadow-none lg:mr-0"
-                />
+              <div className="rounded-xs bg-primary/5 p-10 dark:bg-white/5">
+                <h3 className="mb-6 text-2xl font-bold text-black dark:text-white">
+                  Notre positionnement
+                </h3>
+                <div className="mb-6">
+                  <h4 className="mb-2 text-lg font-semibold text-primary">
+                    Ancrage national — Tchad
+                  </h4>
+                  <p className="text-base text-body-color dark:text-body-color-dark">
+                    Connaissance fine du contexte politique, administratif et
+                    socio-économique tchadien, indispensable pour des analyses
+                    pertinentes et des recommandations applicables.
+                  </p>
+                </div>
+                <div className="mb-6">
+                  <h4 className="mb-2 text-lg font-semibold text-primary">
+                    Couverture régionale — Afrique centrale & Sahel
+                  </h4>
+                  <p className="text-base text-body-color dark:text-body-color-dark">
+                    Interventions démontrées au Mali, Niger, Burkina Faso,
+                    Sénégal, Côte d&apos;Ivoire, Cameroun, RCA, à travers un
+                    réseau d&apos;experts associés.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="mb-2 text-lg font-semibold text-primary">
+                    Standards internationaux
+                  </h4>
+                  <p className="text-base text-body-color dark:text-body-color-dark">
+                    Alignement systématique sur les méthodologies OCDE-CAD,
+                    gestion axée sur les résultats (GAR), cadres logiques et
+                    théories du changement.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
