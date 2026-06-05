@@ -4,11 +4,14 @@ import { prisma } from "@/lib/prisma";
 import SectionTitle from "../Common/SectionTitle";
 
 const Blog = async () => {
-  const articles = await prisma.publication.findMany({
-    where: { published: true },
-    orderBy: { publishedAt: "desc" },
-    take: 3,
-  });
+  let articles = [];
+  try {
+    articles = await prisma.publication.findMany({
+      where: { published: true },
+      orderBy: { publishedAt: "desc" },
+      take: 3,
+    });
+  } catch { return null; }
 
   if (articles.length === 0) return null;
 

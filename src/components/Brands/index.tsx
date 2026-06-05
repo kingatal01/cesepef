@@ -3,10 +3,13 @@ import { prisma } from "@/lib/prisma";
 import SectionTitle from "../Common/SectionTitle";
 
 const Brands = async () => {
-  const partenaires = await prisma.partner.findMany({
-    where: { isActive: true },
-    orderBy: [{ order: "asc" }, { name: "asc" }],
-  });
+  let partenaires = [];
+  try {
+    partenaires = await prisma.partner.findMany({
+      where: { isActive: true },
+      orderBy: [{ order: "asc" }, { name: "asc" }],
+    });
+  } catch { return null; }
 
   if (partenaires.length === 0) return null;
 

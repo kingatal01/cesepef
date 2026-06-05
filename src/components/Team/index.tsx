@@ -15,10 +15,13 @@ const AvatarPlaceholder = ({ initial }: { initial: string }) => (
 );
 
 const Team = async () => {
-  const membres = await prisma.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: [{ order: "asc" }, { name: "asc" }],
-  });
+  let membres = [];
+  try {
+    membres = await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: [{ order: "asc" }, { name: "asc" }],
+    });
+  } catch { return null; }
 
   if (membres.length === 0) return null;
 

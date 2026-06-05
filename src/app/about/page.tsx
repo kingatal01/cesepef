@@ -19,10 +19,13 @@ const AvatarPlaceholder = ({ initial }: { initial: string }) => (
 );
 
 const AboutPage = async () => {
-  const membres = await prisma.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: [{ order: "asc" }, { name: "asc" }],
-  });
+  let membres = [];
+  try {
+    membres = await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: [{ order: "asc" }, { name: "asc" }],
+    });
+  } catch { membres = []; }
 
   const gouvernance = membres.filter((m) =>
     m.department?.toLowerCase().includes("direction") ||

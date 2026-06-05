@@ -17,10 +17,13 @@ function parseLivrables(raw: string | null): string[] {
 }
 
 const Pricing = async () => {
-  const allServices = await prisma.service.findMany({
-    where: { isActive: true },
-    orderBy: [{ order: "asc" }, { title: "asc" }],
-  });
+  let allServices = [];
+  try {
+    allServices = await prisma.service.findMany({
+      where: { isActive: true },
+      orderBy: [{ order: "asc" }, { title: "asc" }],
+    });
+  } catch { return null; }
 
   if (allServices.length === 0) return null;
 
