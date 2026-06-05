@@ -38,7 +38,9 @@ yarn-error.log*
 *.db-shm
 *.db-wal
 
-# Dossier de déploiement généré
+# Dossiers de déploiement générés
+/deploy_app/
+/deploy_public_html/
 /deploy_package/
 
 # Uploads locaux (ne pas versionner les fichiers uploadés)
