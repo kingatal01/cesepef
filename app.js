@@ -19,7 +19,7 @@ const http   = require('http');
 const { parse } = require('url');
 
 // Charger les variables d'environnement depuis .env.production
-require('dotenv').config({ path: path.join(__dirname, '.env.production') });
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const port     = parseInt(process.env.PORT || '3000', 10);
 const hostname = process.env.HOSTNAME || '0.0.0.0';
