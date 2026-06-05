@@ -27,8 +27,24 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env.production
 
 # vercel
 .vercel
 
+# Prisma
 /generated/prisma
+*.db
+*.db-shm
+*.db-wal
+
+# Dossier de déploiement généré
+/deploy_package/
+
+# Uploads locaux (ne pas versionner les fichiers uploadés)
+/public/images/team/*
+/public/images/blog/*
+/public/images/realisations/*
+!/public/images/team/.gitkeep
+!/public/images/blog/.gitkeep
+!/public/images/realisations/.gitkeep
